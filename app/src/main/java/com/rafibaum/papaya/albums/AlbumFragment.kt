@@ -33,7 +33,7 @@ class AlbumFragment : Fragment() {
         }
         val adapter = AlbumAdapter(albums)
         rvAlbums.adapter = adapter
-        rvAlbums.layoutManager = GridLayoutManager(context, 2)
+        rvAlbums.layoutManager = GridLayoutManager(context, resources.getInteger(R.integer.albumsSpan))
         rvAlbums.setHasFixedSize(true)
     }
 }
