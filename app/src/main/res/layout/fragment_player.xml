@@ -30,7 +30,7 @@
 
 
     <TextView
-        android:id="@+id/albumName"
+        android:id="@+id/playerTrack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/playerAlbumArtCard" />
 
     <TextView
-        android:id="@+id/albumArtist"
+        android:id="@+id/playerArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

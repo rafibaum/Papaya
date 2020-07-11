@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.rafibaum.papaya.R
 import kotlinx.android.synthetic.main.fragment_player.*
-import java.util.logging.Logger
 
 /**
  * UI for details about the currently playing track with music controls.
