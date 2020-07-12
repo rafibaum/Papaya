@@ -25,7 +25,8 @@ class MediaState : ViewModel() {
 //        }
 //        state.value = PlayingStatus.PREPARING
 //        mediaPlayer.prepareAsync()
-        mediaPlayer = MediaPlayer.create(context, R.raw.clair)
+//        mediaPlayer = MediaPlayer.create(context, R.raw.clair)
+        mediaPlayer = MediaPlayer()
         mediaPlayer.setOnCompletionListener {
             state.value = PlayingStatus.IDLE
         }

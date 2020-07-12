@@ -24,8 +24,7 @@
             android:id="@+id/player_album_art"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            app:srcCompat="@drawable/kamasi_heaven_and_earth" />
+            android:adjustViewBounds="true" />
     </androidx.cardview.widget.CardView>
 
 
