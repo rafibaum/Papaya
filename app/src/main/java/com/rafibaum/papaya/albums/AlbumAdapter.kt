@@ -34,7 +34,7 @@ class AlbumAdapter(private var albums: List<Album>?) :
         val album = albums!![position]
         holder.albumName.text = album.name
         holder.albumArtist.text = album.artist
-        //holder.coverImage.setImageResource(album.cover)
+        holder.coverImage.setImageURI(album.cover)
     }
 
 }
