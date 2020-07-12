@@ -30,7 +30,8 @@ class AlbumFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val preferences = requireContext().getSharedPreferences(ALBUM_STORAGE_PREFERENCES, Context.MODE_PRIVATE)
+        val preferences =
+            requireContext().getSharedPreferences(ALBUM_STORAGE_PREFERENCES, Context.MODE_PRIVATE)
         val dirUri = preferences.getString(ALBUM_URI_PREF, null)
 
         if (dirUri != null) {
@@ -39,7 +40,10 @@ class AlbumFragment : Fragment() {
             val dirChooser = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
             dirChooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             dirChooser.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-            startActivityForResult(Intent.createChooser(dirChooser, "Choose directory"), DIR_CHOOSER_ID)
+            startActivityForResult(
+                Intent.createChooser(dirChooser, "Choose directory"),
+                DIR_CHOOSER_ID
+            )
         }
 
         return inflater.inflate(R.layout.fragment_albums, container, false)
@@ -54,7 +58,12 @@ class AlbumFragment : Fragment() {
         val spans = resources.getInteger(R.integer.albumsSpan)
         rvAlbums.adapter = adapter
         rvAlbums.layoutManager = GridLayoutManager(context, spans)
-        rvAlbums.addItemDecoration(SpacingItemDecoration(spans, resources.getDimensionPixelSize(R.dimen.albumsSpacing)))
+        rvAlbums.addItemDecoration(
+            SpacingItemDecoration(
+                spans,
+                resources.getDimensionPixelSize(R.dimen.albumsSpacing)
+            )
+        )
         rvAlbums.setHasFixedSize(true)
 
         albumStore.albums.observe(viewLifecycleOwner) {
@@ -75,9 +84,15 @@ class AlbumFragment : Fragment() {
 
                 //TODO: Handle properly
                 data?.data?.let {
-                    requireContext().contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    val preferences = requireContext().getSharedPreferences(ALBUM_STORAGE_PREFERENCES, Context.MODE_PRIVATE)
-                    with (preferences.edit()) {
+                    requireContext().contentResolver.takePersistableUriPermission(
+                        it,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                    val preferences = requireContext().getSharedPreferences(
+                        ALBUM_STORAGE_PREFERENCES,
+                        Context.MODE_PRIVATE
+                    )
+                    with(preferences.edit()) {
                         putString(ALBUM_URI_PREF, it.toString())
                         apply()
                     }

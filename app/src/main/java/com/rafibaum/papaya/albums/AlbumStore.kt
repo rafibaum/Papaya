@@ -19,10 +19,17 @@ class AlbumStore(application: Application) : AndroidViewModel(application) {
     }
 
     private fun getAlbumsFromUri(rootUri: Uri) {
-        val projection = arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID, DocumentsContract.Document.COLUMN_DISPLAY_NAME, DocumentsContract.Document.COLUMN_MIME_TYPE)
+        val projection = arrayOf(
+            DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+            DocumentsContract.Document.COLUMN_MIME_TYPE
+        )
 
         val contentResolver = getApplication<Application>().contentResolver
-        val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, DocumentsContract.getTreeDocumentId(rootUri))
+        val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
+            rootUri,
+            DocumentsContract.getTreeDocumentId(rootUri)
+        )
 
         val albums = ArrayList<Album>()
 
@@ -36,8 +43,10 @@ class AlbumStore(application: Application) : AndroidViewModel(application) {
 
             if (DocumentsContract.Document.MIME_TYPE_DIR == artistMime) {
                 // Artist directory
-                val artistUri = DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, artistDocId)
-                val albumsCursor = contentResolver.query(artistUri, projection, null, null, null) ?: throw IllegalStateException("Null album cursor")
+                val artistUri =
+                    DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, artistDocId)
+                val albumsCursor = contentResolver.query(artistUri, projection, null, null, null)
+                    ?: throw IllegalStateException("Null album cursor")
 
                 while (albumsCursor.moveToNext()) {
                     val albumDocId = albumsCursor.getString(0)
@@ -48,8 +57,11 @@ class AlbumStore(application: Application) : AndroidViewModel(application) {
                         // Album directory
                         val tracks = ArrayList<Track>()
                         var coverUri: Uri? = null
-                        val albumUri = DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, albumDocId)
-                        val trackCursor = contentResolver.query(albumUri, projection, null, null, null) ?: throw IllegalStateException("Null track cursor")
+                        val albumUri =
+                            DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, albumDocId)
+                        val trackCursor =
+                            contentResolver.query(albumUri, projection, null, null, null)
+                                ?: throw IllegalStateException("Null track cursor")
 
                         while (trackCursor.moveToNext()) {
                             val fileDocId = trackCursor.getString(0)
@@ -61,13 +73,18 @@ class AlbumStore(application: Application) : AndroidViewModel(application) {
                                 val position = splitTrack[0].trim().toInt()
 
                                 val trackNameWithExtension = splitTrack[1].trim()
-                                val trackName = trackNameWithExtension.substring(0, trackNameWithExtension.lastIndexOf("."))
+                                val trackName = trackNameWithExtension.substring(
+                                    0,
+                                    trackNameWithExtension.lastIndexOf(".")
+                                )
 
-                                val trackUri = DocumentsContract.buildDocumentUriUsingTree(rootUri, fileDocId)
+                                val trackUri =
+                                    DocumentsContract.buildDocumentUriUsingTree(rootUri, fileDocId)
 
                                 tracks.add(Track(trackName, position, trackUri))
                             } else if (fileMime.startsWith("image")) {
-                                coverUri = DocumentsContract.buildDocumentUriUsingTree(rootUri, fileDocId)
+                                coverUri =
+                                    DocumentsContract.buildDocumentUriUsingTree(rootUri, fileDocId)
                             }
                         }
 

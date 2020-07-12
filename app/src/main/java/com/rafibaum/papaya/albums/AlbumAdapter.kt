@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.rafibaum.papaya.R
 
-class AlbumAdapter(private var albums: List<Album>?) : RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
+class AlbumAdapter(private var albums: List<Album>?) :
+    RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
     inner class ViewHolder(albumCoverView: View) : RecyclerView.ViewHolder(albumCoverView) {
         val albumName: TextView = albumCoverView.findViewById(R.id.albumName)

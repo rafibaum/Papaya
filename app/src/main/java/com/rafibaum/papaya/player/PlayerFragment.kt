@@ -59,7 +59,7 @@ class PlayerFragment : Fragment() {
                     playerPlayBtn.isEnabled = false
                     R.drawable.play_arrow_24px
                 }
-                PlayingStatus.PLAYING ->  {
+                PlayingStatus.PLAYING -> {
                     playerPlayBtn.isEnabled = true
                     enableSeekbarUpdates()
                     R.drawable.pause_24px
@@ -106,7 +106,10 @@ class PlayerFragment : Fragment() {
             }
         })
 
-        mediaState.setDataSource(requireContext(), Uri.parse("android.resource://com.rafibaum.papaya/raw/clair.mp3"))
+        mediaState.setDataSource(
+            requireContext(),
+            Uri.parse("android.resource://com.rafibaum.papaya/raw/clair.mp3")
+        )
         playerBar.max = mediaState.getDuration()
     }
 
