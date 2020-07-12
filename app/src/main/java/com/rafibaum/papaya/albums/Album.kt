@@ -1,3 +1,7 @@
 package com.rafibaum.papaya.albums
 
-class Album(val name: String, val artist: String, val cover: Int)
+import android.net.Uri
+
+class Album(val name: String, val artist: String, val cover: Uri?, val tracks: List<Track>)
+
+class Track(val name: String, val position: Int, val location: Uri)
