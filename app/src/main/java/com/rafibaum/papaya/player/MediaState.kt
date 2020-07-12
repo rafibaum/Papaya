@@ -5,7 +5,6 @@ import android.media.MediaPlayer
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rafibaum.papaya.R
 
 /**
  * Represents current state of media playback.

@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.rafibaum.papaya.R
@@ -23,7 +23,7 @@ private const val ALBUM_URI_PREF = "ALBUM_URI"
 
 class AlbumFragment : Fragment() {
 
-    private val albumStore: AlbumStore by viewModels()
+    private val albumStore: AlbumStore by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

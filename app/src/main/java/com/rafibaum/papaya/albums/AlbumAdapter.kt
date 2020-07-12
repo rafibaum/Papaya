@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.rafibaum.papaya.R
 
@@ -12,6 +13,7 @@ class AlbumAdapter(private var albums: List<Album>?) :
     RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
     inner class ViewHolder(albumCoverView: View) : RecyclerView.ViewHolder(albumCoverView) {
+        val albumLayout: View = albumCoverView
         val albumName: TextView = albumCoverView.findViewById(R.id.albumName)
         val albumArtist: TextView = albumCoverView.findViewById(R.id.albumArtist)
         val coverImage: ImageView = albumCoverView.findViewById(R.id.albumCover)
@@ -35,6 +37,11 @@ class AlbumAdapter(private var albums: List<Album>?) :
         holder.albumName.text = album.name
         holder.albumArtist.text = album.artist
         holder.coverImage.setImageURI(album.cover)
+        holder.albumLayout.setOnClickListener {
+            val toTracks = AlbumFragmentDirections.seeTracks(position)
+            it.findNavController().navigate(toTracks)
+        }
     }
+
 
 }
