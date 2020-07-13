@@ -66,6 +66,14 @@ class AlbumFragment : Fragment() {
         )
         rvAlbums.setHasFixedSize(true)
 
+        // Needed to make return transitions work. Suspends transition until recycler view is fully
+        // loaded and transitions can be mapped properly on return.
+        postponeEnterTransition()
+        rvAlbums.viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            true
+        }
+
         albumStore.albums.observe(viewLifecycleOwner) {
             adapter.update(it)
             albumLoadingProgress.visibility = View.INVISIBLE

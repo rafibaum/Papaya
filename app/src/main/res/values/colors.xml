@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorAccent">#F16868</color>
+    <color name="papaya">#F16868</color>
+    <color name="papayaDark">#b9363d</color>
+    <color name="papayaLight">#ff9a96</color>
 </resources>

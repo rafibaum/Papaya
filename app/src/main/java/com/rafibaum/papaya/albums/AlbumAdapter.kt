@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import com.rafibaum.papaya.R
 
@@ -39,7 +40,10 @@ class AlbumAdapter(private var albums: List<Album>?) :
         holder.coverImage.setImageURI(album.cover)
         holder.albumLayout.setOnClickListener {
             val toTracks = AlbumFragmentDirections.seeTracks(position)
-            it.findNavController().navigate(toTracks)
+            val extras = FragmentNavigatorExtras(
+                holder.albumLayout to "album_cover"
+            )
+            it.findNavController().navigate(toTracks, extras)
         }
     }
 

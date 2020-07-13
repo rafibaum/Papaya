@@ -1,9 +1,9 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/papaya</item>
+        <item name="colorPrimaryDark">@color/papayaDark</item>
+        <item name="android:background">?android:attr/colorBackground</item>
     </style>
 
 </resources>

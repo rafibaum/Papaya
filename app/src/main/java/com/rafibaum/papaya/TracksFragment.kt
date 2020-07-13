@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.transition.MaterialContainerTransform
 import com.rafibaum.papaya.albums.AlbumStore
 import kotlinx.android.synthetic.main.fragment_tracks.*
 
@@ -24,10 +25,19 @@ class TracksFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_tracks, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val transform = MaterialContainerTransform()
+        transform.fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
+        sharedElementEnterTransition = transform
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         albumStore.albums.observe(viewLifecycleOwner) {
             textView.text = it[args.albumIndex].name
+            artistText.text = it[args.albumIndex].artist
+            imageView.setImageURI(it[args.albumIndex].cover)
         }
     }
 }

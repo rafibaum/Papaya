@@ -37,7 +37,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-medium"
         android:text="Fists of Fury"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerAlbumArtCard" />
@@ -49,7 +49,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:text="Kamasi Washington"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/papaya"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerTrack" />

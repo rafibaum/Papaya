@@ -3,7 +3,8 @@
     android:id="@+id/albumLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:transitionName="album_cover">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/albumCard"
@@ -24,14 +25,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/albumArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/papaya"
         android:textSize="14sp" />
 
 </LinearLayout>
