@@ -28,7 +28,6 @@ class TracksFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val transform = MaterialContainerTransform()
-        transform.fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
         sharedElementEnterTransition = transform
     }
 
