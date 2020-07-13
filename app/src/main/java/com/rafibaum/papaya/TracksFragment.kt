@@ -27,8 +27,14 @@ class TracksFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val transform = MaterialContainerTransform()
-        sharedElementEnterTransition = transform
+
+        val enterTransform = MaterialContainerTransform()
+        enterTransform.scaleMaskProgressThresholds = MaterialContainerTransform.ProgressThresholds(0.25f, 1.0f)
+        sharedElementEnterTransition = enterTransform
+
+        val exitTransform = MaterialContainerTransform()
+        exitTransform.scaleMaskProgressThresholds = MaterialContainerTransform.ProgressThresholds(0.0f, 0.6f)
+        sharedElementReturnTransition = exitTransform
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
