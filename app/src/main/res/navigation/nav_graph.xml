@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/tracksFragment"
-        android:name="com.rafibaum.papaya.TracksFragment"
+        android:name="com.rafibaum.papaya.tracks.TracksFragment"
         android:label="TracksFragment">
         <argument
             android:name="albumIndex"

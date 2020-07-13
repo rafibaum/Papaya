@@ -1,6 +1,6 @@
 <resources>
-    <style name="AppTheme" parent="Theme">
-    </style>
+
+    <style name="AppTheme" parent="Theme" />
 
     <style name="Theme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/papaya</item>

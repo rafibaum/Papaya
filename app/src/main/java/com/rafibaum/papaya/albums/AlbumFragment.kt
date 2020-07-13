@@ -14,7 +14,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.rafibaum.papaya.R
-import com.rafibaum.papaya.SpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_albums.*
 
 private const val DIR_CHOOSER_ID = 30

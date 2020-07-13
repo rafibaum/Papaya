@@ -1,4 +1,4 @@
-package com.rafibaum.papaya.albums
+package com.rafibaum.papaya.tracks
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.rafibaum.papaya.R
+import com.rafibaum.papaya.albums.Album
 
 class TracksAdapter(private val album: Album) : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
 

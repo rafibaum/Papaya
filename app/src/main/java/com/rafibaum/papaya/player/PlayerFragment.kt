@@ -53,21 +53,21 @@ class PlayerFragment : Fragment() {
             val imageId = when (status) {
                 PlayingStatus.IDLE -> {
                     playerPlayBtn.isEnabled = false
-                    R.drawable.play_arrow_24px
+                    R.drawable.play_arrow
                 }
                 PlayingStatus.PREPARING -> {
                     playerPlayBtn.isEnabled = false
-                    R.drawable.play_arrow_24px
+                    R.drawable.play_arrow
                 }
                 PlayingStatus.PLAYING -> {
                     playerPlayBtn.isEnabled = true
                     enableSeekbarUpdates()
-                    R.drawable.pause_24px
+                    R.drawable.pause
                 }
                 PlayingStatus.PAUSED -> {
                     playerPlayBtn.isEnabled = true
                     disableSeekbarUpdates()
-                    R.drawable.play_arrow_24px
+                    R.drawable.play_arrow
                 }
             }
 

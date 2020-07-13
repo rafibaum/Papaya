@@ -1,4 +1,4 @@
-package com.rafibaum.papaya
+package com.rafibaum.papaya.albums
 
 import android.graphics.Rect
 import android.view.View

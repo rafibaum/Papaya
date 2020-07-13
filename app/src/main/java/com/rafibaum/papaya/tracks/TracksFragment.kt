@@ -1,4 +1,4 @@
-package com.rafibaum.papaya
+package com.rafibaum.papaya.tracks
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialContainerTransform
+import com.rafibaum.papaya.R
 import com.rafibaum.papaya.albums.AlbumStore
-import com.rafibaum.papaya.albums.TracksAdapter
 import kotlinx.android.synthetic.main.fragment_tracks.*
 
 class TracksFragment : Fragment() {
@@ -31,11 +31,13 @@ class TracksFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val enterTransform = MaterialContainerTransform()
-        enterTransform.scaleMaskProgressThresholds = MaterialContainerTransform.ProgressThresholds(0.25f, 1.0f)
+        enterTransform.scaleMaskProgressThresholds =
+            MaterialContainerTransform.ProgressThresholds(0.25f, 1.0f)
         sharedElementEnterTransition = enterTransform
 
         val exitTransform = MaterialContainerTransform()
-        exitTransform.scaleMaskProgressThresholds = MaterialContainerTransform.ProgressThresholds(0.0f, 0.6f)
+        exitTransform.scaleMaskProgressThresholds =
+            MaterialContainerTransform.ProgressThresholds(0.0f, 0.6f)
         sharedElementReturnTransition = exitTransform
     }
 

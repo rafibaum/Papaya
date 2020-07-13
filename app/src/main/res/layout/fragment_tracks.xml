@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionName="album_cover"
-    tools:context=".TracksFragment">
+    tools:context=".tracks.TracksFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -43,6 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/tracks_album_cover_desc"
                     android:scaleType="fitCenter" />
             </androidx.cardview.widget.CardView>
 
@@ -52,18 +53,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:textSize="24sp"
                 android:fontFamily="sans-serif-medium"
                 android:textColor="?attr/colorOnSurface"
-                />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/tracksAlbumArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textSize="18sp"
-                android:textColor="?attr/colorPrimary"/>
+                android:textColor="?attr/colorPrimary"
+                android:textSize="18sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tracksList"
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        app:icon="@drawable/play_arrow_24px"
-        android:text="PLAY"/>
+        android:text="@string/tracks_fab_play"
+        app:icon="@drawable/play_arrow" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
