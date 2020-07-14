@@ -22,7 +22,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -49,19 +49,19 @@
 
             <TextView
                 android:id="@+id/tracksAlbumName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:fontFamily="sans-serif-medium"
+                android:textAlignment="center"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/tracksAlbumArtist"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="18sp" />
 
