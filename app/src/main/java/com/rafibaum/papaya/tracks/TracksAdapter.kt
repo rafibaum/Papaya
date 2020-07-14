@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.rafibaum.papaya.R
 import com.rafibaum.papaya.albums.Album
 
-class TracksAdapter(private val album: Album) : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
+class TracksAdapter(private val albumIndex: Int, private val album: Album) : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
 
-    inner class ViewHolder(trackView: View) : RecyclerView.ViewHolder(trackView) {
+    inner class ViewHolder(val trackView: View) : RecyclerView.ViewHolder(trackView) {
         val trackPosition: TextView = trackView.findViewById(R.id.trackPosition)
         val trackName: TextView = trackView.findViewById(R.id.trackName)
     }
@@ -27,6 +28,10 @@ class TracksAdapter(private val album: Album) : RecyclerView.Adapter<TracksAdapt
         val track = album.tracks[position]
         holder.trackPosition.text = track.position.toString()
         holder.trackName.text = track.name
+        holder.trackView.setOnClickListener {
+            val playTrack = TracksFragmentDirections.playTrack(albumIndex, position)
+            it.findNavController().navigate(playTrack)
+        }
     }
 
 }

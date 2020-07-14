@@ -2,7 +2,6 @@ package com.rafibaum.papaya.player
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,9 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.navArgs
 import com.rafibaum.papaya.R
+import com.rafibaum.papaya.albums.AlbumStore
 import kotlinx.android.synthetic.main.fragment_player.*
 
 /**
@@ -24,6 +27,8 @@ class PlayerFragment : Fragment() {
 
     // Provides information about player state
     private val mediaState: MediaState by viewModels()
+    private val albumStore: AlbumStore by activityViewModels()
+    private val playerArgs: PlayerFragmentArgs by navArgs()
 
     private val seekbarUpdater: Runnable = Runnable { updateSeekbar() }
     private val handler: Handler = Handler(Looper.getMainLooper())
@@ -59,6 +64,11 @@ class PlayerFragment : Fragment() {
                     playerPlayBtn.isEnabled = false
                     R.drawable.play_arrow
                 }
+                PlayingStatus.READY -> {
+                    playerPlayBtn.isEnabled = true
+                    playerBar.max = mediaState.getDuration()
+                    R.drawable.play_arrow
+                }
                 PlayingStatus.PLAYING -> {
                     playerPlayBtn.isEnabled = true
                     enableSeekbarUpdates()
@@ -85,6 +95,7 @@ class PlayerFragment : Fragment() {
             when (mediaState.getState().value) {
                 PlayingStatus.PLAYING -> mediaState.pause()
                 PlayingStatus.PAUSED -> mediaState.play()
+                PlayingStatus.READY -> mediaState.play()
             }
         }
 
@@ -106,11 +117,23 @@ class PlayerFragment : Fragment() {
             }
         })
 
-        mediaState.setDataSource(
-            requireContext(),
-            Uri.parse("android.resource://com.rafibaum.papaya/raw/clair.mp3")
-        )
-        playerBar.max = mediaState.getDuration()
+        albumStore.albums.observe(viewLifecycleOwner) {
+            val album = it[playerArgs.album]
+            val track = album.tracks[playerArgs.track]
+
+            playerTrack.text = track.name
+            playerArtist.text = album.artist
+            player_album_art.setImageURI(album.cover)
+            mediaState.setDataSource(
+                requireContext(),
+                track.location
+            )
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mediaState.pause()
     }
 
     private fun disableSeekbarUpdates() {

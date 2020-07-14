@@ -25,5 +25,20 @@
         <argument
             android:name="albumIndex"
             app:argType="integer" />
+        <action
+            android:id="@+id/playTrack"
+            app:destination="@id/playerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.rafibaum.papaya.player.PlayerFragment"
+        android:label="fragment_player"
+        tools:layout="@layout/fragment_player" >
+        <argument
+            android:name="album"
+            app:argType="integer" />
+        <argument
+            android:name="track"
+            app:argType="integer" />
     </fragment>
 </navigation>

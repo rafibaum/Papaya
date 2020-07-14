@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
  * Represents current state of media playback.
  */
 class MediaState : ViewModel() {
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer = MediaPlayer()
     private val state: MutableLiveData<PlayingStatus> = MutableLiveData(
         PlayingStatus.IDLE
     )
@@ -18,18 +18,12 @@ class MediaState : ViewModel() {
     fun getState() = state
 
     fun setDataSource(context: Context, uri: Uri) {
-//        mediaPlayer.setDataSource(context, uri)
-//        mediaPlayer.setOnPreparedListener {
-//            state.value = PlayingStatus.PAUSED
-//        }
-//        state.value = PlayingStatus.PREPARING
-//        mediaPlayer.prepareAsync()
-//        mediaPlayer = MediaPlayer.create(context, R.raw.clair)
-        mediaPlayer = MediaPlayer()
-        mediaPlayer.setOnCompletionListener {
-            state.value = PlayingStatus.IDLE
+        mediaPlayer.setDataSource(context, uri)
+        mediaPlayer.setOnPreparedListener {
+            state.value = PlayingStatus.READY
         }
-        state.value = PlayingStatus.PAUSED
+        state.value = PlayingStatus.PREPARING
+        mediaPlayer.prepareAsync()
     }
 
     fun play() {
@@ -47,11 +41,18 @@ class MediaState : ViewModel() {
     fun getDuration(): Int = mediaPlayer.duration
 
     fun seekTo(progress: Int) = mediaPlayer.seekTo(progress)
+
+    override fun onCleared() {
+        super.onCleared()
+        mediaPlayer.reset()
+        mediaPlayer.release()
+    }
 }
 
 enum class PlayingStatus {
     IDLE, // Awaiting data source
     PREPARING, // Loading data
+    READY,
     PLAYING,
     PAUSED,
 }

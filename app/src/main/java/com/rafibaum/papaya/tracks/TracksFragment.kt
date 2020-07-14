@@ -58,7 +58,7 @@ class TracksFragment : Fragment() {
             tracksAlbumArtist.text = album.artist
             tracksAlbumCover.setImageURI(album.cover)
 
-            val adapter = TracksAdapter(album)
+            val adapter = TracksAdapter(args.albumIndex, album)
             tracksList.adapter = adapter
             tracksList.layoutManager = LinearLayoutManager(context)
             tracksList.isNestedScrollingEnabled = false
