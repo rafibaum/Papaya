@@ -13,8 +13,7 @@ import com.rafibaum.papaya.R
 class AlbumAdapter(private var albums: List<Album>?) :
     RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
-    inner class ViewHolder(albumCoverView: View) : RecyclerView.ViewHolder(albumCoverView) {
-        val albumLayout: View = albumCoverView
+    inner class ViewHolder(val albumCoverView: View) : RecyclerView.ViewHolder(albumCoverView) {
         val albumName: TextView = albumCoverView.findViewById(R.id.albumName)
         val albumArtist: TextView = albumCoverView.findViewById(R.id.albumArtist)
         val coverImage: ImageView = albumCoverView.findViewById(R.id.albumCover)
@@ -38,10 +37,10 @@ class AlbumAdapter(private var albums: List<Album>?) :
         holder.albumName.text = album.name
         holder.albumArtist.text = album.artist
         holder.coverImage.setImageURI(album.cover)
-        holder.albumLayout.setOnClickListener {
+        holder.albumCoverView.setOnClickListener {
             val toTracks = AlbumFragmentDirections.seeTracks(position)
             val extras = FragmentNavigatorExtras(
-                holder.albumLayout to "album_cover"
+                holder.albumCoverView to "album_cover"
             )
             it.findNavController().navigate(toTracks, extras)
         }

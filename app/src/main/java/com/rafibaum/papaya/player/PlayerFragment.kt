@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.transition.MaterialContainerTransform
 import com.rafibaum.papaya.R
 import com.rafibaum.papaya.albums.AlbumStore
 import kotlinx.android.synthetic.main.fragment_player.*
@@ -33,6 +34,11 @@ class PlayerFragment : Fragment() {
     private val seekbarUpdater: Runnable = Runnable { updateSeekbar() }
     private val handler: Handler = Handler(Looper.getMainLooper())
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,6 +48,12 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        postponeEnterTransition()
+        view.viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            true
+        }
 
         // Fetch colour for player seek bar
         val colour: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -129,11 +141,6 @@ class PlayerFragment : Fragment() {
                 track.location
             )
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mediaState.pause()
     }
 
     private fun disableSeekbarUpdates() {

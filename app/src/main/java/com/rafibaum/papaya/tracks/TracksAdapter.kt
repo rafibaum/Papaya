@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import com.rafibaum.papaya.R
 import com.rafibaum.papaya.albums.Album
@@ -30,7 +31,10 @@ class TracksAdapter(private val albumIndex: Int, private val album: Album) : Rec
         holder.trackName.text = track.name
         holder.trackView.setOnClickListener {
             val playTrack = TracksFragmentDirections.playTrack(albumIndex, position)
-            it.findNavController().navigate(playTrack)
+            val playExtras = FragmentNavigatorExtras(
+                holder.trackView to "track_container"
+            )
+            it.findNavController().navigate(playTrack, playExtras)
         }
     }
 
