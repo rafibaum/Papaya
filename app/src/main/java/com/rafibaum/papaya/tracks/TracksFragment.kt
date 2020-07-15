@@ -56,14 +56,9 @@ class TracksFragment : Fragment() {
 
         albumStore.albums.observe(viewLifecycleOwner) {
             val album = it[args.albumIndex]
-            tracksAlbumName.text = album.name
-            tracksAlbumArtist.text = album.artist
-            tracksAlbumCover.setImageURI(album.cover)
-
             val adapter = TracksAdapter(args.albumIndex, album)
             tracksList.adapter = adapter
             tracksList.layoutManager = LinearLayoutManager(context)
-            tracksList.isNestedScrollingEnabled = false
         }
     }
 }
