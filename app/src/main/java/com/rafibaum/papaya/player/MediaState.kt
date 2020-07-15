@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
  */
 class MediaState : ViewModel() {
     private var mediaPlayer: MediaPlayer = MediaPlayer()
+    private var mediaUri: Uri? = null
     private val state: MutableLiveData<PlayingStatus> = MutableLiveData(
         PlayingStatus.IDLE
     )
@@ -18,6 +19,11 @@ class MediaState : ViewModel() {
     fun getState() = state
 
     fun setDataSource(context: Context, uri: Uri) {
+        if (uri == mediaUri) {
+            return
+        }
+
+        mediaUri = uri
         mediaPlayer.setDataSource(context, uri)
         mediaPlayer.setOnPreparedListener {
             state.value = PlayingStatus.READY

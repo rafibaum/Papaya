@@ -81,11 +81,13 @@ class PlayerFragment : Fragment() {
                 }
                 PlayingStatus.PLAYING -> {
                     playerPlayBtn.isEnabled = true
+                    playerBar.max = mediaState.getDuration()
                     enableSeekbarUpdates()
                     R.drawable.pause
                 }
                 PlayingStatus.PAUSED -> {
                     playerPlayBtn.isEnabled = true
+                    playerBar.max = mediaState.getDuration()
                     disableSeekbarUpdates()
                     R.drawable.play_arrow
                 }
@@ -139,6 +141,11 @@ class PlayerFragment : Fragment() {
                 track.location
             )
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disableSeekbarUpdates()
     }
 
     private fun disableSeekbarUpdates() {
