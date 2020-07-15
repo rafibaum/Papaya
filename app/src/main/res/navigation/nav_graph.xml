@@ -40,7 +40,7 @@
         android:id="@+id/playerFragment"
         android:name="com.rafibaum.papaya.player.PlayerFragment"
         android:label="fragment_player"
-        tools:layout="@layout/fragment_player" >
+        tools:layout="@layout/fragment_player">
         <argument
             android:name="album"
             app:argType="integer" />

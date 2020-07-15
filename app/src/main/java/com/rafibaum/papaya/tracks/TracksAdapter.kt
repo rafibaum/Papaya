@@ -91,7 +91,11 @@ class TracksAdapter(private val albumIndex: Int, private val album: Album) :
                 val transitionName = "track_container_$trackPosition"
                 trackHolder.trackView.transitionName = transitionName
                 trackHolder.trackView.setOnClickListener {
-                    val playTrack = TracksFragmentDirections.playTrack(albumIndex, trackPosition, transitionName)
+                    val playTrack = TracksFragmentDirections.playTrack(
+                        albumIndex,
+                        trackPosition,
+                        transitionName
+                    )
                     val playExtras = FragmentNavigatorExtras(
                         trackHolder.trackView to transitionName
                     )

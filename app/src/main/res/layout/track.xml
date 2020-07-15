@@ -29,8 +29,8 @@
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
         android:layout_marginTop="15dp"
+        android:background="?android:attr/listDivider"
         app:layout_constraintStart_toEndOf="@id/trackPosition"
         app:layout_constraintTop_toBottomOf="@id/trackName" />
 
