@@ -4,6 +4,6 @@
     android:viewportWidth="3"
     android:viewportHeight="30">
     <path
-        android:fillColor="#4f4f4f"
+        android:fillColor="@color/seekbar"
         android:pathData="M0,0L3,0L3,16L0,16L0,0Z" />
 </vector>

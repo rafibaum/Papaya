@@ -3,4 +3,5 @@
     <color name="papaya">#FF006B</color>
     <color name="papayaDark">#c50041</color>
     <color name="papayaLight">#ff5c99</color>
+    <color name="seekbar">#757575</color>
 </resources>

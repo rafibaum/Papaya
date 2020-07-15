@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -57,12 +58,7 @@ class PlayerFragment : Fragment() {
             true
         }
 
-        // Fetch colour for player seek bar
-        val colour: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            resources.getColor(android.R.color.darker_gray, null)
-        } else {
-            resources.getColor(android.R.color.darker_gray)
-        }
+        val colour: Int = ContextCompat.getColor(requireContext(), R.color.seekbar)
 
         playerBar.progressDrawable.colorFilter =
             PorterDuffColorFilter(colour, PorterDuff.Mode.SRC_ATOP)
