@@ -70,6 +70,7 @@
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/play_arrow"
+        android:tint="?attr/colorOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerBar" />
@@ -83,6 +84,7 @@
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/fast_rewind"
+        android:tint="?attr/colorOnSurface"
         app:layout_constraintEnd_toStartOf="@+id/playerPlayBtn"
         app:layout_constraintTop_toBottomOf="@+id/playerBar" />
 
@@ -95,6 +97,7 @@
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/fast_forward"
+        android:tint="?attr/colorOnSurface"
         app:layout_constraintStart_toEndOf="@+id/playerPlayBtn"
         app:layout_constraintTop_toBottomOf="@+id/playerBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
