@@ -37,10 +37,13 @@ class AlbumAdapter(private var albums: List<Album>?) :
         holder.albumName.text = album.name
         holder.albumArtist.text = album.artist
         holder.coverImage.setImageURI(album.cover)
+
+        val transitionName = "album_cover_$position"
+        holder.albumCoverView.transitionName = transitionName
         holder.albumCoverView.setOnClickListener {
-            val toTracks = AlbumFragmentDirections.seeTracks(position)
+            val toTracks = AlbumFragmentDirections.seeTracks(position, transitionName)
             val extras = FragmentNavigatorExtras(
-                holder.albumCoverView to "album_cover"
+                holder.albumCoverView to transitionName
             )
             it.findNavController().navigate(toTracks, extras)
         }

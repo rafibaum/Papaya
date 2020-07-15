@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/playerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:transitionName="track_container">
+    android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/playerAlbumArtCard"

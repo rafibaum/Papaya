@@ -49,6 +49,8 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.transitionName = playerArgs.transitionName
+
         postponeEnterTransition()
         view.viewTreeObserver.addOnPreDrawListener {
             startPostponedEnterTransition()

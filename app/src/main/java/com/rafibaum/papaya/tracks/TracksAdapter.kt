@@ -29,10 +29,13 @@ class TracksAdapter(private val albumIndex: Int, private val album: Album) : Rec
         val track = album.tracks[position]
         holder.trackPosition.text = track.position.toString()
         holder.trackName.text = track.name
+
+        val transitionName = "track_container_$position"
+        holder.trackView.transitionName = transitionName
         holder.trackView.setOnClickListener {
-            val playTrack = TracksFragmentDirections.playTrack(albumIndex, position)
+            val playTrack = TracksFragmentDirections.playTrack(albumIndex, position, transitionName)
             val playExtras = FragmentNavigatorExtras(
-                holder.trackView to "track_container"
+                holder.trackView to transitionName
             )
             it.findNavController().navigate(playTrack, playExtras)
         }
