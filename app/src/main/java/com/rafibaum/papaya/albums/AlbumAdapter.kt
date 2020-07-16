@@ -1,10 +1,12 @@
 package com.rafibaum.papaya.albums
 
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -14,6 +16,12 @@ import com.rafibaum.papaya.R
 
 class AlbumAdapter(private val fragment: Fragment, private var albums: List<Album>?) :
     RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
+    private val placeholderColor = ColorDrawable(
+        ContextCompat.getColor(
+            fragment.requireContext(),
+            R.color.placeholder
+        )
+    )
 
     inner class ViewHolder(val albumCoverView: View) : RecyclerView.ViewHolder(albumCoverView) {
         val albumName: TextView = albumCoverView.findViewById(R.id.albumName)
@@ -38,8 +46,7 @@ class AlbumAdapter(private val fragment: Fragment, private var albums: List<Albu
         val album = albums!![position]
         holder.albumName.text = album.name
         holder.albumArtist.text = album.artist
-        Glide.with(fragment).load(album.cover).into(holder.coverImage)
-
+        Glide.with(fragment).load(album.cover).placeholder(placeholderColor).into(holder.coverImage)
         val transitionName = "album_cover_$position"
         holder.albumCoverView.transitionName = transitionName
         holder.albumCoverView.setOnClickListener {

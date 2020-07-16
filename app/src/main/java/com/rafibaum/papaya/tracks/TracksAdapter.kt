@@ -1,10 +1,12 @@
 package com.rafibaum.papaya.tracks
 
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -18,8 +20,18 @@ private const val NAME = 1
 private const val ARTIST = 2
 private const val TRACK = 3
 
-class TracksAdapter(private val fragment: Fragment, private val albumIndex: Int, private val album: Album) :
+class TracksAdapter(
+    private val fragment: Fragment,
+    private val albumIndex: Int,
+    private val album: Album
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val placeholderColor = ColorDrawable(
+        ContextCompat.getColor(
+            fragment.requireContext(),
+            R.color.placeholder
+        )
+    )
 
     inner class AlbumCoverHolder(coverView: View) : RecyclerView.ViewHolder(coverView) {
         val coverImage: ImageView = coverView.findViewById(R.id.tracksAlbumCover)
@@ -73,7 +85,8 @@ class TracksAdapter(private val fragment: Fragment, private val albumIndex: Int,
         when (holder.itemViewType) {
             COVER -> {
                 val coverHolder: AlbumCoverHolder = holder as AlbumCoverHolder
-                Glide.with(fragment).load(album.cover).into(coverHolder.coverImage)
+                Glide.with(fragment).load(album.cover).placeholder(placeholderColor)
+                    .into(coverHolder.coverImage)
             }
             NAME -> {
                 val nameHolder: AlbumNameHolder = holder as AlbumNameHolder

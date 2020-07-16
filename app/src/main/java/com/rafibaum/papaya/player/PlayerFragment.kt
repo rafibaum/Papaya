@@ -2,6 +2,7 @@ package com.rafibaum.papaya.player
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -27,7 +28,6 @@ import kotlinx.android.synthetic.main.fragment_player.*
  * UI for details about the currently playing track with music controls.
  */
 class PlayerFragment : Fragment() {
-
     // Provides information about player state
     private val mediaState: MediaState by viewModels()
     private val albumStore: AlbumStore by activityViewModels()
@@ -36,9 +36,17 @@ class PlayerFragment : Fragment() {
     private val seekbarUpdater: Runnable = Runnable { updateSeekbar() }
     private val handler: Handler = Handler(Looper.getMainLooper())
 
+    private lateinit var placeholderColor: ColorDrawable
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition = MaterialContainerTransform()
+        placeholderColor = ColorDrawable(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.placeholder
+            )
+        )
     }
 
     override fun onCreateView(
@@ -136,7 +144,7 @@ class PlayerFragment : Fragment() {
 
             playerTrack.text = track.name
             playerArtist.text = album.artist
-            Glide.with(this).load(album.cover).into(playerAlbumArt)
+            Glide.with(this).load(album.cover).placeholder(placeholderColor).into(playerAlbumArt)
             mediaState.setDataSource(
                 requireContext(),
                 track.location
