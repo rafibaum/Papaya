@@ -5,9 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.rafibaum.papaya.R
 import com.rafibaum.papaya.albums.Album
 
@@ -16,7 +18,7 @@ private const val NAME = 1
 private const val ARTIST = 2
 private const val TRACK = 3
 
-class TracksAdapter(private val albumIndex: Int, private val album: Album) :
+class TracksAdapter(private val fragment: Fragment, private val albumIndex: Int, private val album: Album) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class AlbumCoverHolder(coverView: View) : RecyclerView.ViewHolder(coverView) {
@@ -71,7 +73,7 @@ class TracksAdapter(private val albumIndex: Int, private val album: Album) :
         when (holder.itemViewType) {
             COVER -> {
                 val coverHolder: AlbumCoverHolder = holder as AlbumCoverHolder
-                coverHolder.coverImage.setImageURI(album.cover)
+                Glide.with(fragment).load(album.cover).into(coverHolder.coverImage)
             }
             NAME -> {
                 val nameHolder: AlbumNameHolder = holder as AlbumNameHolder

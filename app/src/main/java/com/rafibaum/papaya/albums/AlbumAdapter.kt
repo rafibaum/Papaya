@@ -5,12 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.rafibaum.papaya.R
 
-class AlbumAdapter(private var albums: List<Album>?) :
+class AlbumAdapter(private val fragment: Fragment, private var albums: List<Album>?) :
     RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
     inner class ViewHolder(val albumCoverView: View) : RecyclerView.ViewHolder(albumCoverView) {
@@ -36,7 +38,7 @@ class AlbumAdapter(private var albums: List<Album>?) :
         val album = albums!![position]
         holder.albumName.text = album.name
         holder.albumArtist.text = album.artist
-        holder.coverImage.setImageURI(album.cover)
+        Glide.with(fragment).load(album.cover).into(holder.coverImage)
 
         val transitionName = "album_cover_$position"
         holder.albumCoverView.transitionName = transitionName

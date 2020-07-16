@@ -53,7 +53,7 @@ class AlbumFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(appbar)
 
         val rvAlbums = albumList
-        val adapter = AlbumAdapter(albumStore.albums.value)
+        val adapter = AlbumAdapter(this, albumStore.albums.value)
         val spans = resources.getInteger(R.integer.albumsSpan)
         rvAlbums.adapter = adapter
         rvAlbums.layoutManager = GridLayoutManager(context, spans)

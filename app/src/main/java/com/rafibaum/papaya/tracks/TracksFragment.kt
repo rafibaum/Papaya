@@ -56,7 +56,7 @@ class TracksFragment : Fragment() {
 
         albumStore.albums.observe(viewLifecycleOwner) {
             val album = it[args.albumIndex]
-            val adapter = TracksAdapter(args.albumIndex, album)
+            val adapter = TracksAdapter(this, args.albumIndex, album)
             tracksList.adapter = adapter
             tracksList.layoutManager = LinearLayoutManager(context)
         }

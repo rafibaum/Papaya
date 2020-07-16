@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialContainerTransform
 import com.rafibaum.papaya.R
 import com.rafibaum.papaya.albums.AlbumStore
@@ -135,7 +136,7 @@ class PlayerFragment : Fragment() {
 
             playerTrack.text = track.name
             playerArtist.text = album.artist
-            player_album_art.setImageURI(album.cover)
+            Glide.with(this).load(album.cover).into(playerAlbumArt)
             mediaState.setDataSource(
                 requireContext(),
                 track.location
