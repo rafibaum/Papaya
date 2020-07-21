@@ -5,19 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialContainerTransform
 import com.rafibaum.papaya.R
-import com.rafibaum.papaya.albums.AlbumStore
 import kotlinx.android.synthetic.main.fragment_tracks.*
 
 class TracksFragment : Fragment() {
 
     private val args: TracksFragmentArgs by navArgs()
-    private val albumStore: AlbumStore by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,11 +49,12 @@ class TracksFragment : Fragment() {
             true
         }
 
-        albumStore.albums.observe(viewLifecycleOwner) {
-            val album = it[args.albumIndex]
-            val adapter = TracksAdapter(this, args.albumIndex, album)
-            tracksList.adapter = adapter
-            tracksList.layoutManager = LinearLayoutManager(context)
-        }
+        //TODO
+//        albumStore.albums.observe(viewLifecycleOwner) {
+//            val album = it[args.albumIndex]
+//            val adapter = TracksAdapter(this, args.albumIndex, album)
+//            tracksList.adapter = adapter
+//            tracksList.layoutManager = LinearLayoutManager(context)
+//        }
     }
 }

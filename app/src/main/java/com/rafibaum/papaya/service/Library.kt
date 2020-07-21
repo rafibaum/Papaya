@@ -1,38 +1,30 @@
-package com.rafibaum.papaya.albums
+package com.rafibaum.papaya.service
 
-import android.app.Application
+import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import com.rafibaum.papaya.albums.Album
 import com.rafibaum.papaya.tracks.Track
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.HashMap
 
-class AlbumStore(application: Application) : AndroidViewModel(application) {
-    val albums: MutableLiveData<List<Album>> = MutableLiveData()
+private val projection = arrayOf(
+    DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+    DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+    DocumentsContract.Document.COLUMN_MIME_TYPE
+)
 
-    fun setRootUri(rootUri: Uri) {
-        viewModelScope.launch(Dispatchers.IO) {
-            getAlbumsFromUri(rootUri)
-        }
-    }
+class Library(context: Context, rootUri: Uri) {
+    val albums: Map<UUID, Album>
 
-    private fun getAlbumsFromUri(rootUri: Uri) {
-        val projection = arrayOf(
-            DocumentsContract.Document.COLUMN_DOCUMENT_ID,
-            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
-            DocumentsContract.Document.COLUMN_MIME_TYPE
-        )
-
-        val contentResolver = getApplication<Application>().contentResolver
+    init {
+        val contentResolver = context.contentResolver
         val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
             rootUri,
             DocumentsContract.getTreeDocumentId(rootUri)
         )
 
-        val albums = ArrayList<Album>()
+        val albums = HashMap<UUID, Album>()
 
         val artistsCursor = contentResolver.query(childrenUri, projection, null, null, null)
             ?: throw IllegalStateException("Null cursor")
@@ -46,8 +38,9 @@ class AlbumStore(application: Application) : AndroidViewModel(application) {
                 // Artist directory
                 val artistUri =
                     DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, artistDocId)
-                val albumsCursor = contentResolver.query(artistUri, projection, null, null, null)
-                    ?: throw IllegalStateException("Null album cursor")
+                val albumsCursor =
+                    contentResolver.query(artistUri, projection, null, null, null)
+                        ?: throw IllegalStateException("Null album cursor")
 
                 while (albumsCursor.moveToNext()) {
                     val albumDocId = albumsCursor.getString(0)
@@ -59,11 +52,15 @@ class AlbumStore(application: Application) : AndroidViewModel(application) {
                         val tracks = ArrayList<Track>()
                         var coverUri: Uri? = null
                         val albumUri =
-                            DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, albumDocId)
+                            DocumentsContract.buildChildDocumentsUriUsingTree(
+                                rootUri,
+                                albumDocId
+                            )
                         val trackCursor =
                             contentResolver.query(albumUri, projection, null, null, null)
                                 ?: throw IllegalStateException("Null track cursor")
 
+                        var index = 0
                         while (trackCursor.moveToNext()) {
                             val fileDocId = trackCursor.getString(0)
                             val fileName = trackCursor.getString(1)
@@ -80,17 +77,26 @@ class AlbumStore(application: Application) : AndroidViewModel(application) {
                                 )
 
                                 val trackUri =
-                                    DocumentsContract.buildDocumentUriUsingTree(rootUri, fileDocId)
+                                    DocumentsContract.buildDocumentUriUsingTree(
+                                        rootUri,
+                                        fileDocId
+                                    )
 
-                                tracks.add(Track(trackName, position, trackUri))
+                                tracks.add(Track(index, trackName, position, trackUri))
+                                index += 1
                             } else if (fileMime.startsWith("image")) {
                                 coverUri =
-                                    DocumentsContract.buildDocumentUriUsingTree(rootUri, fileDocId)
+                                    DocumentsContract.buildDocumentUriUsingTree(
+                                        rootUri,
+                                        fileDocId
+                                    )
                             }
                         }
 
                         val sortedTracks = tracks.sortedBy { it.position }
-                        albums.add(Album(albumName, artistName, coverUri, sortedTracks))
+                        val uuid = UUID.randomUUID()
+                        albums[uuid] =
+                            Album(uuid, albumName, artistName, coverUri, sortedTracks)
 
                         trackCursor.close()
                     }
@@ -102,6 +108,6 @@ class AlbumStore(application: Application) : AndroidViewModel(application) {
 
         artistsCursor.close()
 
-        this.albums.postValue(albums)
+        this.albums = albums
     }
 }

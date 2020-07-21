@@ -3,7 +3,6 @@ package com.rafibaum.papaya.player
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,15 +12,9 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialContainerTransform
 import com.rafibaum.papaya.R
-import com.rafibaum.papaya.albums.AlbumStore
 import kotlinx.android.synthetic.main.fragment_player.*
 
 /**
@@ -29,8 +22,8 @@ import kotlinx.android.synthetic.main.fragment_player.*
  */
 class PlayerFragment : Fragment() {
     // Provides information about player state
-    private val mediaState: MediaState by viewModels()
-    private val albumStore: AlbumStore by activityViewModels()
+//    private val mediaState: MediaState by viewModels()
+//    private val albumStore: AlbumStore by activityViewModels()
     private val playerArgs: PlayerFragmentArgs by navArgs()
 
     private val seekbarUpdater: Runnable = Runnable { updateSeekbar() }
@@ -72,53 +65,55 @@ class PlayerFragment : Fragment() {
         playerBar.progressDrawable.colorFilter =
             PorterDuffColorFilter(colour, PorterDuff.Mode.SRC_ATOP)
 
+        //TODO
         // Observe play/pause status
-        mediaState.getState().observe(viewLifecycleOwner, Observer<PlayingStatus> { status ->
-            val imageId = when (status) {
-                PlayingStatus.IDLE -> {
-                    playerPlayBtn.isEnabled = false
-                    R.drawable.play_arrow
-                }
-                PlayingStatus.PREPARING -> {
-                    playerPlayBtn.isEnabled = false
-                    R.drawable.play_arrow
-                }
-                PlayingStatus.READY -> {
-                    playerPlayBtn.isEnabled = true
-                    playerBar.max = mediaState.getDuration()
-                    R.drawable.play_arrow
-                }
-                PlayingStatus.PLAYING -> {
-                    playerPlayBtn.isEnabled = true
-                    playerBar.max = mediaState.getDuration()
-                    enableSeekbarUpdates()
-                    R.drawable.pause
-                }
-                PlayingStatus.PAUSED -> {
-                    playerPlayBtn.isEnabled = true
-                    playerBar.max = mediaState.getDuration()
-                    disableSeekbarUpdates()
-                    R.drawable.play_arrow
-                }
-            }
+//        mediaState.getState().observe(viewLifecycleOwner, Observer<PlayingStatus> { status ->
+//            val imageId = when (status) {
+//                PlayingStatus.IDLE -> {
+//                    playerPlayBtn.isEnabled = false
+//                    R.drawable.play_arrow
+//                }
+//                PlayingStatus.PREPARING -> {
+//                    playerPlayBtn.isEnabled = false
+//                    R.drawable.play_arrow
+//                }
+//                PlayingStatus.READY -> {
+//                    playerPlayBtn.isEnabled = true
+//                    playerBar.max = mediaState.getDuration()
+//                    R.drawable.play_arrow
+//                }
+//                PlayingStatus.PLAYING -> {
+//                    playerPlayBtn.isEnabled = true
+//                    playerBar.max = mediaState.getDuration()
+//                    enableSeekbarUpdates()
+//                    R.drawable.pause
+//                }
+//                PlayingStatus.PAUSED -> {
+//                    playerPlayBtn.isEnabled = true
+//                    playerBar.max = mediaState.getDuration()
+//                    disableSeekbarUpdates()
+//                    R.drawable.play_arrow
+//                }
+//            }
+//
+//            val drawable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                resources.getDrawable(imageId, null)
+//            } else {
+//                resources.getDrawable(imageId)
+//            }
+//
+//            playerPlayBtn.setImageDrawable(drawable)
+//        })
 
-            val drawable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                resources.getDrawable(imageId, null)
-            } else {
-                resources.getDrawable(imageId)
-            }
-
-            playerPlayBtn.setImageDrawable(drawable)
-        })
-
+        //TODO
         // Play/pause button behaviour
-        playerPlayBtn.setOnClickListener {
-            when (mediaState.getState().value) {
-                PlayingStatus.PLAYING -> mediaState.pause()
-                PlayingStatus.PAUSED -> mediaState.play()
-                PlayingStatus.READY -> mediaState.play()
-            }
-        }
+//        playerPlayBtn.setOnClickListener {
+//            when (mediaState.getState().value) {
+//                PlayingStatus.PLAYING -> mediaState.pause()
+//                PlayingStatus.PAUSED -> mediaState.play()
+//                PlayingStatus.READY -> mediaState.play()
+//            }
+//        }
 
         // Seeking behaviour
         playerBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -130,26 +125,28 @@ class PlayerFragment : Fragment() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if (seekBar != null) {
-                    mediaState.seekTo(seekBar.progress)
-                }
+                //TODO
+//                if (seekBar != null) {
+//                    mediaState.seekTo(seekBar.progress)
+//                }
 
                 enableSeekbarUpdates()
             }
         })
 
-        albumStore.albums.observe(viewLifecycleOwner) {
-            val album = it[playerArgs.album]
-            val track = album.tracks[playerArgs.track]
-
-            playerTrack.text = track.name
-            playerArtist.text = album.artist
-            Glide.with(this).load(album.cover).placeholder(placeholderColor).into(playerAlbumArt)
-            mediaState.setDataSource(
-                requireContext(),
-                track.location
-            )
-        }
+        //TODO
+//        albumStore.albums.observe(viewLifecycleOwner) {
+//            val album = it[playerArgs.album]
+//            val track = album.tracks[playerArgs.track]
+//
+//            playerTrack.text = track.name
+//            playerArtist.text = album.artist
+//            Glide.with(this).load(album.cover).placeholder(placeholderColor).into(playerAlbumArt)
+//            mediaState.setDataSource(
+//                requireContext(),
+//                track.location
+//            )
+//        }
     }
 
     override fun onStop() {
@@ -166,7 +163,7 @@ class PlayerFragment : Fragment() {
     }
 
     private fun updateSeekbar() {
-        playerBar.progress = mediaState.getProgress()
+//        playerBar.progress = mediaState.getProgress()
         handler.postDelayed(seekbarUpdater, 100)
     }
 }

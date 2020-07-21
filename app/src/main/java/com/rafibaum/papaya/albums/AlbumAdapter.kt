@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rafibaum.papaya.R
 
-class AlbumAdapter(private val fragment: Fragment, private var albums: List<Album>?) :
+class AlbumAdapter(private val fragment: Fragment, private var albums: List<AlbumView>?) :
     RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
     private val placeholderColor = ColorDrawable(
         ContextCompat.getColor(
@@ -29,7 +29,7 @@ class AlbumAdapter(private val fragment: Fragment, private var albums: List<Albu
         val coverImage: ImageView = albumCoverView.findViewById(R.id.albumCover)
     }
 
-    fun update(albums: List<Album>) {
+    fun update(albums: List<AlbumView>) {
         this.albums = albums
         notifyDataSetChanged()
     }
