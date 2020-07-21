@@ -40,15 +40,19 @@ class AlbumAdapter(private val fragment: Fragment) :
     override fun getItemCount(): Int = albums?.size ?: 0
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val description = albums!![position].description
+        val album = albums!![position]
+        val description = album.description
+
         holder.albumName.text = description.title
         holder.albumArtist.text = description.subtitle
         Glide.with(fragment).load(description.iconUri).placeholder(placeholderColor)
             .into(holder.coverImage)
+
         val transitionName = "album_cover_$position"
         holder.albumCoverView.transitionName = transitionName
+
         holder.albumCoverView.setOnClickListener {
-            val toTracks = AlbumFragmentDirections.seeTracks(position, transitionName)
+            val toTracks = AlbumFragmentDirections.seeTracks(transitionName, album)
             val extras = FragmentNavigatorExtras(
                 holder.albumCoverView to transitionName
             )

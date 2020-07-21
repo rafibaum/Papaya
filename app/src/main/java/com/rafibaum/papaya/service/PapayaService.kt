@@ -8,6 +8,7 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.media.MediaBrowserServiceCompat
+import com.rafibaum.papaya.albums.Album
 
 const val EMPTY_ID = "EMPTY"
 const val ROOT_ID = "ROOT"
@@ -57,14 +58,15 @@ class PapayaService : MediaBrowserServiceCompat() {
     ) {
         library?.let { library ->
             val items = ArrayList<MediaBrowserCompat.MediaItem>()
+            val idParts = parentId.split("/")
 
-            when (parentId) {
+            when (idParts[0]) {
                 EMPTY_ID -> {
                     result.sendResult(null)
                     return
                 }
                 ROOT_ID -> root(items)
-                ALBUM_ID -> albums(library, items)
+                ALBUM_ID -> albums(idParts, library, items)
             }
 
             result.sendResult(items)
@@ -82,20 +84,73 @@ class PapayaService : MediaBrowserServiceCompat() {
         items.add(albums)
     }
 
-    private fun albums(library: Library, items: MutableList<MediaBrowserCompat.MediaItem>) {
-        for (entry in library.albums) {
-            val uuid = entry.key
-            val album = entry.value
+    private fun albums(
+        idParts: List<String>,
+        library: Library,
+        items: MutableList<MediaBrowserCompat.MediaItem>
+    ) {
+        if (idParts.size < 2) {
+            albumListing(library, items)
+        } else {
+            trackListing(idParts[1], library, items)
+        }
+    }
 
-            val albumItem =
-                MediaBrowserCompat.MediaItem(
-                    MediaDescriptionCompat.Builder().setMediaId("$ALBUM_ID/$uuid")
-                        .setTitle(album.name)
-                        .setSubtitle(album.artist).setIconUri(album.cover).build(),
-                    MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
-                )
+    private fun albumListing(library: Library, items: MutableList<MediaBrowserCompat.MediaItem>) {
+        for (album in library.albums.values) {
+            val albumItem = getAlbumMediaItem(album)
             items.add(albumItem)
         }
+    }
+
+    private fun trackListing(
+        key: String,
+        library: Library,
+        items: MutableList<MediaBrowserCompat.MediaItem>
+    ) {
+        val album = library.albums[key] ?: return //TODO: Should send result null
+
+        for ((pos, track) in album.tracks.withIndex()) {
+            val trackItem = MediaBrowserCompat.MediaItem(
+                MediaDescriptionCompat.Builder().setMediaId("$ALBUM_ID/${album.uuid}/$pos")
+                    .setTitle(track.name).build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
+            )
+            items.add(trackItem)
+        }
+    }
+
+    override fun onLoadItem(itemId: String, result: Result<MediaBrowserCompat.MediaItem>) {
+        library?.let { library ->
+            val idParts = itemId.split("/")
+
+            val item = when (idParts[0]) {
+                ALBUM_ID -> album(idParts[1], library)
+                else -> null
+            }
+
+            result.sendResult(item)
+            return
+        }
+
+        result.sendResult(null)
+        return
+    }
+
+    private fun album(
+        key: String,
+        library: Library
+    ): MediaBrowserCompat.MediaItem? {
+        val album = library.albums[key] ?: return null
+        return getAlbumMediaItem(album)
+    }
+
+    private fun getAlbumMediaItem(album: Album): MediaBrowserCompat.MediaItem {
+        return MediaBrowserCompat.MediaItem(
+            MediaDescriptionCompat.Builder().setMediaId("$ALBUM_ID/${album.uuid}")
+                .setTitle(album.name)
+                .setSubtitle(album.artist).setIconUri(album.cover).build(),
+            MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
+        )
     }
 
     inner class SessionCallback : MediaSessionCompat.Callback()

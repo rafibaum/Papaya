@@ -45,10 +45,6 @@ class AlbumFragment : Fragment() {
         // Needed to make return transitions work. Suspends transition until recycler view is fully
         // loaded and transitions can be mapped properly on return.
         postponeEnterTransition()
-        albumList.viewTreeObserver.addOnPreDrawListener {
-            startPostponedEnterTransition()
-            true
-        }
     }
 
     override fun onStart() {
@@ -74,6 +70,7 @@ class AlbumFragment : Fragment() {
             adapter.notifyDataSetChanged()
             albumLoadingProgress.visibility = View.INVISIBLE
             albumList.visibility = View.VISIBLE
+            startPostponedEnterTransition() //TODO Check if progress is necessary
         }
 
         override fun onError(parentId: String) {

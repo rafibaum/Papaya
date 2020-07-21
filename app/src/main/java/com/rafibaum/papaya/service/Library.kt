@@ -15,7 +15,7 @@ private val projection = arrayOf(
 )
 
 class Library(context: Context, rootUri: Uri) {
-    val albums: Map<UUID, Album>
+    val albums: Map<String, Album>
 
     init {
         val contentResolver = context.contentResolver
@@ -24,7 +24,7 @@ class Library(context: Context, rootUri: Uri) {
             DocumentsContract.getTreeDocumentId(rootUri)
         )
 
-        val albums = HashMap<UUID, Album>()
+        val albums = HashMap<String, Album>()
 
         val artistsCursor = contentResolver.query(childrenUri, projection, null, null, null)
             ?: throw IllegalStateException("Null cursor")
@@ -94,7 +94,7 @@ class Library(context: Context, rootUri: Uri) {
                         }
 
                         val sortedTracks = tracks.sortedBy { it.position }
-                        val uuid = UUID.randomUUID()
+                        val uuid = UUID.randomUUID().toString()
                         albums[uuid] =
                             Album(uuid, albumName, artistName, coverUri, sortedTracks)
 

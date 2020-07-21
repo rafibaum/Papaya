@@ -22,9 +22,6 @@
         android:id="@+id/tracksFragment"
         android:name="com.rafibaum.papaya.tracks.TracksFragment"
         android:label="TracksFragment">
-        <argument
-            android:name="albumIndex"
-            app:argType="integer" />
         <action
             android:id="@+id/playTrack"
             app:destination="@id/playerFragment"
@@ -35,6 +32,9 @@
         <argument
             android:name="transitionName"
             app:argType="string" />
+        <argument
+            android:name="album"
+            app:argType="android.support.v4.media.MediaBrowserCompat$MediaItem" />
     </fragment>
     <fragment
         android:id="@+id/playerFragment"

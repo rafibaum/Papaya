@@ -1,6 +1,7 @@
 package com.rafibaum.papaya.tracks
 
 import android.graphics.drawable.ColorDrawable
+import android.support.v4.media.MediaBrowserCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rafibaum.papaya.R
-import com.rafibaum.papaya.albums.Album
 
 private const val COVER = 0
 private const val NAME = 1
@@ -22,10 +20,10 @@ private const val TRACK = 3
 
 class TracksAdapter(
     private val fragment: Fragment,
-    private val albumIndex: Int,
-    private val album: Album
+    private val album: MediaBrowserCompat.MediaItem
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var tracks: MutableList<MediaBrowserCompat.MediaItem>? = null
     private val placeholderColor = ColorDrawable(
         ContextCompat.getColor(
             fragment.requireContext(),
@@ -70,7 +68,13 @@ class TracksAdapter(
         }
     }
 
-    override fun getItemCount(): Int = 3 + album.tracks.size
+    override fun getItemCount(): Int {
+        tracks?.let { tracks ->
+            return 3 + tracks.size
+        }
+
+        return 0
+    }
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
@@ -85,36 +89,38 @@ class TracksAdapter(
         when (holder.itemViewType) {
             COVER -> {
                 val coverHolder: AlbumCoverHolder = holder as AlbumCoverHolder
-                Glide.with(fragment).load(album.cover).placeholder(placeholderColor)
+                Glide.with(fragment).load(album.description.iconUri).placeholder(placeholderColor)
                     .into(coverHolder.coverImage)
             }
             NAME -> {
                 val nameHolder: AlbumNameHolder = holder as AlbumNameHolder
-                nameHolder.nameView.text = album.name
+                nameHolder.nameView.text = album.description.title
             }
             ARTIST -> {
                 val artistHolder: AlbumArtistHolder = holder as AlbumArtistHolder
-                artistHolder.artistView.text = album.artist
+                artistHolder.artistView.text = album.description.subtitle
             }
             TRACK -> {
                 val trackHolder: TrackViewHolder = holder as TrackViewHolder
                 val trackPosition = position - 3
-                val track = album.tracks[trackPosition]
-                trackHolder.trackPosition.text = track.position.toString()
-                trackHolder.trackName.text = track.name
+                val track = tracks!![trackPosition]
+                trackHolder.trackPosition.text =
+                    (trackPosition + 1).toString() //TODO: use actual position
+                trackHolder.trackName.text = track.description.title
 
                 val transitionName = "track_container_$trackPosition"
                 trackHolder.trackView.transitionName = transitionName
                 trackHolder.trackView.setOnClickListener {
-                    val playTrack = TracksFragmentDirections.playTrack(
-                        albumIndex,
-                        trackPosition,
-                        transitionName
-                    )
-                    val playExtras = FragmentNavigatorExtras(
-                        trackHolder.trackView to transitionName
-                    )
-                    it.findNavController().navigate(playTrack, playExtras)
+                    //TODO
+//                    val playTrack = TracksFragmentDirections.playTrack(
+//                        albumIndex,
+//                        trackPosition,
+//                        transitionName
+//                    )
+//                    val playExtras = FragmentNavigatorExtras(
+//                        trackHolder.trackView to transitionName
+//                    )
+//                    it.findNavController().navigate(playTrack, playExtras)
                 }
             }
         }
