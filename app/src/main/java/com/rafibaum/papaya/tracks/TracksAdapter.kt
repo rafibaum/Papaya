@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rafibaum.papaya.R
+import com.rafibaum.papaya.service.EXTRA_TRACK_POSITION
 
 private const val COVER = 0
 private const val NAME = 1
@@ -102,13 +103,14 @@ class TracksAdapter(
             }
             TRACK -> {
                 val trackHolder: TrackViewHolder = holder as TrackViewHolder
-                val trackPosition = position - 3
-                val track = tracks!![trackPosition]
-                trackHolder.trackPosition.text =
-                    (trackPosition + 1).toString() //TODO: use actual position
+                val trackIndex = position - 3
+                val track = tracks!![trackIndex]
+
+                val trackPosition = track.description.extras!!.getInt(EXTRA_TRACK_POSITION)
+                trackHolder.trackPosition.text = trackPosition.toString()
                 trackHolder.trackName.text = track.description.title
 
-                val transitionName = "track_container_$trackPosition"
+                val transitionName = "track_container_$trackIndex"
                 trackHolder.trackView.transitionName = transitionName
                 trackHolder.trackView.setOnClickListener {
                     //TODO

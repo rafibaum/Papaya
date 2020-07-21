@@ -13,6 +13,7 @@ import com.rafibaum.papaya.albums.Album
 const val EMPTY_ID = "EMPTY"
 const val ROOT_ID = "ROOT"
 const val ALBUM_ID = "ALBUMS"
+const val EXTRA_TRACK_POSITION = "TRACK_POS"
 
 const val MUSIC_STORAGE_PREFERENCES = "MUSIC_STORAGE"
 const val MUSIC_URI_PREF = "MUSIC_URI"
@@ -112,9 +113,13 @@ class PapayaService : MediaBrowserServiceCompat() {
         val items = ArrayList<MediaBrowserCompat.MediaItem>()
 
         for ((pos, track) in album.tracks.withIndex()) {
+            val extras = Bundle()
+            extras.putInt(EXTRA_TRACK_POSITION, track.position)
+
             val trackItem = MediaBrowserCompat.MediaItem(
                 MediaDescriptionCompat.Builder().setMediaId("$ALBUM_ID/${album.uuid}/$pos")
-                    .setTitle(track.name).build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
+                    .setTitle(track.name).setExtras(extras).build(),
+                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
             )
             items.add(trackItem)
         }
