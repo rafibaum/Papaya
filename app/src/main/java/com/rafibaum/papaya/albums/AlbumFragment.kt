@@ -68,9 +68,7 @@ class AlbumFragment : Fragment() {
         ) {
             adapter.albums = children
             adapter.notifyDataSetChanged()
-            albumLoadingProgress.visibility = View.INVISIBLE
-            albumList.visibility = View.VISIBLE
-            startPostponedEnterTransition() //TODO Check if progress is necessary
+            startPostponedEnterTransition()
         }
 
         override fun onError(parentId: String) {
