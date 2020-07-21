@@ -14,6 +14,7 @@ private val projection = arrayOf(
     DocumentsContract.Document.COLUMN_MIME_TYPE
 )
 
+//TODO: Use MediaItem internally
 class Library(context: Context, rootUri: Uri) {
     val albums: Map<String, Album>
 
