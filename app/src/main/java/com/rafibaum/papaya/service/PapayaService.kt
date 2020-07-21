@@ -57,16 +57,13 @@ class PapayaService : MediaBrowserServiceCompat() {
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
         library?.let { library ->
-            val items = ArrayList<MediaBrowserCompat.MediaItem>()
             val idParts = parentId.split("/")
 
-            when (idParts[0]) {
-                EMPTY_ID -> {
-                    result.sendResult(null)
-                    return
-                }
-                ROOT_ID -> root(items)
-                ALBUM_ID -> albums(idParts, library, items)
+            val items = when (idParts[0]) {
+                EMPTY_ID -> null
+                ROOT_ID -> root()
+                ALBUM_ID -> albums(idParts, library)
+                else -> null
             }
 
             result.sendResult(items)
@@ -76,39 +73,43 @@ class PapayaService : MediaBrowserServiceCompat() {
         result.sendResult(null)
     }
 
-    private fun root(items: MutableList<MediaBrowserCompat.MediaItem>) {
+    private fun root(): MutableList<MediaBrowserCompat.MediaItem> {
+        val items = ArrayList<MediaBrowserCompat.MediaItem>()
+
         val albums = MediaBrowserCompat.MediaItem(
             MediaDescriptionCompat.Builder().setMediaId(ALBUM_ID).setTitle("Albums").build(),
             MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
         )
         items.add(albums)
+        return items
     }
 
     private fun albums(
         idParts: List<String>,
-        library: Library,
-        items: MutableList<MediaBrowserCompat.MediaItem>
-    ) {
-        if (idParts.size < 2) {
-            albumListing(library, items)
+        library: Library
+    ): MutableList<MediaBrowserCompat.MediaItem>? {
+        return if (idParts.size < 2) {
+            albumListing(library)
         } else {
-            trackListing(idParts[1], library, items)
+            trackListing(idParts[1], library)
         }
     }
 
-    private fun albumListing(library: Library, items: MutableList<MediaBrowserCompat.MediaItem>) {
+    private fun albumListing(library: Library): MutableList<MediaBrowserCompat.MediaItem> {
+        val items = ArrayList<MediaBrowserCompat.MediaItem>()
         for (album in library.albums.values) {
             val albumItem = getAlbumMediaItem(album)
             items.add(albumItem)
         }
+        return items
     }
 
     private fun trackListing(
         key: String,
-        library: Library,
-        items: MutableList<MediaBrowserCompat.MediaItem>
-    ) {
-        val album = library.albums[key] ?: return //TODO: Should send result null
+        library: Library
+    ): MutableList<MediaBrowserCompat.MediaItem>? {
+        val album = library.albums[key] ?: return null
+        val items = ArrayList<MediaBrowserCompat.MediaItem>()
 
         for ((pos, track) in album.tracks.withIndex()) {
             val trackItem = MediaBrowserCompat.MediaItem(
@@ -117,6 +118,8 @@ class PapayaService : MediaBrowserServiceCompat() {
             )
             items.add(trackItem)
         }
+
+        return items
     }
 
     override fun onLoadItem(itemId: String, result: Result<MediaBrowserCompat.MediaItem>) {
