@@ -2,10 +2,10 @@ package com.rafibaum.papaya.albums
 
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.rafibaum.papaya.MainActivity
@@ -27,11 +27,12 @@ class AlbumFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).setSupportActionBar(appbar)
+        val activity = (requireActivity() as MainActivity)
+        activity.setSupportActionBar(appbar)
 
-        adapter = AlbumAdapter(this, ArrayList())
-        val spans = resources.getInteger(R.integer.albumsSpan)
+        adapter = AlbumAdapter(this)
         albumList.adapter = adapter
+        val spans = resources.getInteger(R.integer.albumsSpan)
         albumList.layoutManager = GridLayoutManager(context, spans)
         albumList.addItemDecoration(
             SpacingItemDecoration(
@@ -54,33 +55,29 @@ class AlbumFragment : Fragment() {
         super.onStart()
 
         val mediaBrowser = (requireActivity() as MainActivity).getMediaBrowser()
-        mediaBrowser.subscribe(ALBUM_ID, albumsCallback)
+        mediaBrowser.subscribe(ALBUM_ID, albumBrowserCallback)
     }
 
-    private val albumsCallback = object : MediaBrowserCompat.SubscriptionCallback() {
+    override fun onStop() {
+        super.onStop()
+
+        val mediaBrowser = (requireActivity() as MainActivity).getMediaBrowser()
+        mediaBrowser.unsubscribe(ALBUM_ID, albumBrowserCallback)
+    }
+
+    private val albumBrowserCallback = object : MediaBrowserCompat.SubscriptionCallback() {
         override fun onChildrenLoaded(
             parentId: String,
             children: MutableList<MediaBrowserCompat.MediaItem>
         ) {
-            val list = ArrayList<AlbumView>()
-            for (item in children) {
-                val description = item.description
-                list.add(
-                    AlbumView(
-                        description.title!!.toString(),
-                        description.subtitle!!.toString(),
-                        description.iconUri!!
-                    )
-                )
-            }
-
-            adapter.update(list)
+            adapter.albums = children
+            adapter.notifyDataSetChanged()
             albumLoadingProgress.visibility = View.INVISIBLE
             albumList.visibility = View.VISIBLE
         }
 
         override fun onError(parentId: String) {
-
+            Log.e("AlbumAdapter", "Can't load albums")
         }
     }
 }

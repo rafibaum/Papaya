@@ -1,6 +1,7 @@
 package com.rafibaum.papaya.albums
 
 import android.graphics.drawable.ColorDrawable
+import android.support.v4.media.MediaBrowserCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rafibaum.papaya.R
 
-class AlbumAdapter(private val fragment: Fragment, private var albums: List<AlbumView>?) :
+class AlbumAdapter(private val fragment: Fragment) :
     RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
+    var albums: MutableList<MediaBrowserCompat.MediaItem>? = null
     private val placeholderColor = ColorDrawable(
         ContextCompat.getColor(
             fragment.requireContext(),
@@ -29,11 +31,6 @@ class AlbumAdapter(private val fragment: Fragment, private var albums: List<Albu
         val coverImage: ImageView = albumCoverView.findViewById(R.id.albumCover)
     }
 
-    fun update(albums: List<AlbumView>) {
-        this.albums = albums
-        notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val albumCoverView = inflater.inflate(R.layout.album_cover, parent, false)
@@ -43,10 +40,11 @@ class AlbumAdapter(private val fragment: Fragment, private var albums: List<Albu
     override fun getItemCount(): Int = albums?.size ?: 0
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val album = albums!![position]
-        holder.albumName.text = album.name
-        holder.albumArtist.text = album.artist
-        Glide.with(fragment).load(album.cover).placeholder(placeholderColor).into(holder.coverImage)
+        val description = albums!![position].description
+        holder.albumName.text = description.title
+        holder.albumArtist.text = description.subtitle
+        Glide.with(fragment).load(description.iconUri).placeholder(placeholderColor)
+            .into(holder.coverImage)
         val transitionName = "album_cover_$position"
         holder.albumCoverView.transitionName = transitionName
         holder.albumCoverView.setOnClickListener {
