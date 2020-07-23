@@ -42,12 +42,6 @@
         android:label="fragment_player"
         tools:layout="@layout/fragment_player">
         <argument
-            android:name="album"
-            app:argType="integer" />
-        <argument
-            android:name="track"
-            app:argType="integer" />
-        <argument
             android:name="transitionName"
             app:argType="string" />
     </fragment>

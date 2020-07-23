@@ -2,6 +2,7 @@ package com.rafibaum.papaya.tracks
 
 import android.graphics.drawable.ColorDrawable
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.session.MediaControllerCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rafibaum.papaya.R
@@ -113,16 +116,17 @@ class TracksAdapter(
                 val transitionName = "track_container_$trackIndex"
                 trackHolder.trackView.transitionName = transitionName
                 trackHolder.trackView.setOnClickListener {
-                    //TODO
-//                    val playTrack = TracksFragmentDirections.playTrack(
-//                        albumIndex,
-//                        trackPosition,
-//                        transitionName
-//                    )
-//                    val playExtras = FragmentNavigatorExtras(
-//                        trackHolder.trackView to transitionName
-//                    )
-//                    it.findNavController().navigate(playTrack, playExtras)
+                    val controller =
+                        MediaControllerCompat.getMediaController(fragment.requireActivity())
+                    controller.transportControls.prepareFromMediaId(track.mediaId, null)
+
+                    val playTrack = TracksFragmentDirections.playTrack(
+                        transitionName
+                    )
+                    val playExtras = FragmentNavigatorExtras(
+                        trackHolder.trackView to transitionName
+                    )
+                    it.findNavController().navigate(playTrack, playExtras)
                 }
             }
         }

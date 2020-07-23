@@ -3,9 +3,11 @@ package com.rafibaum.papaya.player
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,21 +15,20 @@ import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialContainerTransform
 import com.rafibaum.papaya.R
 import kotlinx.android.synthetic.main.fragment_player.*
+
+private const val SEEKBAR_MAX = 1_000_000.0f
 
 /**
  * UI for details about the currently playing track with music controls.
  */
 class PlayerFragment : Fragment() {
-    // Provides information about player state
-//    private val mediaState: MediaState by viewModels()
-//    private val albumStore: AlbumStore by activityViewModels()
     private val playerArgs: PlayerFragmentArgs by navArgs()
-
-    private val seekbarUpdater: Runnable = Runnable { updateSeekbar() }
-    private val handler: Handler = Handler(Looper.getMainLooper())
+    private var playerState = PlaybackStateCompat.STATE_NONE
+    private var mediaDuration: Float? = null
 
     private lateinit var placeholderColor: ColorDrawable
 
@@ -65,55 +66,15 @@ class PlayerFragment : Fragment() {
         playerBar.progressDrawable.colorFilter =
             PorterDuffColorFilter(colour, PorterDuff.Mode.SRC_ATOP)
 
-        //TODO
-        // Observe play/pause status
-//        mediaState.getState().observe(viewLifecycleOwner, Observer<PlayingStatus> { status ->
-//            val imageId = when (status) {
-//                PlayingStatus.IDLE -> {
-//                    playerPlayBtn.isEnabled = false
-//                    R.drawable.play_arrow
-//                }
-//                PlayingStatus.PREPARING -> {
-//                    playerPlayBtn.isEnabled = false
-//                    R.drawable.play_arrow
-//                }
-//                PlayingStatus.READY -> {
-//                    playerPlayBtn.isEnabled = true
-//                    playerBar.max = mediaState.getDuration()
-//                    R.drawable.play_arrow
-//                }
-//                PlayingStatus.PLAYING -> {
-//                    playerPlayBtn.isEnabled = true
-//                    playerBar.max = mediaState.getDuration()
-//                    enableSeekbarUpdates()
-//                    R.drawable.pause
-//                }
-//                PlayingStatus.PAUSED -> {
-//                    playerPlayBtn.isEnabled = true
-//                    playerBar.max = mediaState.getDuration()
-//                    disableSeekbarUpdates()
-//                    R.drawable.play_arrow
-//                }
-//            }
-//
-//            val drawable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                resources.getDrawable(imageId, null)
-//            } else {
-//                resources.getDrawable(imageId)
-//            }
-//
-//            playerPlayBtn.setImageDrawable(drawable)
-//        })
+        val mediaController = MediaControllerCompat.getMediaController(requireActivity())
 
-        //TODO
         // Play/pause button behaviour
-//        playerPlayBtn.setOnClickListener {
-//            when (mediaState.getState().value) {
-//                PlayingStatus.PLAYING -> mediaState.pause()
-//                PlayingStatus.PAUSED -> mediaState.play()
-//                PlayingStatus.READY -> mediaState.play()
-//            }
-//        }
+        playerPlayBtn.setOnClickListener {
+            when (playerState) {
+                PlaybackStateCompat.STATE_PLAYING -> mediaController.transportControls.pause()
+                else -> mediaController.transportControls.play()
+            }
+        }
 
         // Seeking behaviour
         playerBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -121,49 +82,68 @@ class PlayerFragment : Fragment() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                disableSeekbarUpdates()
             }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                //TODO
-//                if (seekBar != null) {
-//                    mediaState.seekTo(seekBar.progress)
-//                }
-
-                enableSeekbarUpdates()
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                mediaDuration?.let { duration ->
+                    val seekDest = ((seekBar.progress / SEEKBAR_MAX) * duration).toLong()
+                    mediaController.transportControls.seekTo(seekDest)
+                }
             }
         })
-
-        //TODO
-//        albumStore.albums.observe(viewLifecycleOwner) {
-//            val album = it[playerArgs.album]
-//            val track = album.tracks[playerArgs.track]
-//
-//            playerTrack.text = track.name
-//            playerArtist.text = album.artist
-//            Glide.with(this).load(album.cover).placeholder(placeholderColor).into(playerAlbumArt)
-//            mediaState.setDataSource(
-//                requireContext(),
-//                track.location
-//            )
-//        }
     }
 
-    override fun onStop() {
-        super.onStop()
-        disableSeekbarUpdates()
+    override fun onResume() {
+        super.onResume()
+
+        val mediaController = MediaControllerCompat.getMediaController(requireActivity())
+        controllerCallback.onMetadataChanged(mediaController.metadata)
+        controllerCallback.onPlaybackStateChanged(mediaController.playbackState)
+        mediaController.registerCallback(controllerCallback)
     }
 
-    private fun disableSeekbarUpdates() {
-        handler.removeCallbacks(seekbarUpdater)
+    override fun onPause() {
+        super.onPause()
+
+        val mediaController = MediaControllerCompat.getMediaController(requireActivity())
+        mediaController.unregisterCallback(controllerCallback)
     }
 
-    private fun enableSeekbarUpdates() {
-        handler.post(seekbarUpdater)
-    }
+    private val controllerCallback = object : MediaControllerCompat.Callback() {
+        override fun onPlaybackStateChanged(state: PlaybackStateCompat) {
+            if (playerState != state.state) {
+                playerState = state.state
+                val icon = when (state.state) {
+                    PlaybackStateCompat.STATE_PLAYING -> {
+                        playerPlayBtn.isEnabled = true
+                        R.drawable.pause
+                    }
+                    PlaybackStateCompat.STATE_PAUSED -> {
+                        playerPlayBtn.isEnabled = true
+                        R.drawable.play_arrow
+                    }
+                    else -> {
+                        playerPlayBtn.isEnabled = false
+                        R.drawable.play_arrow
+                    }
+                }
 
-    private fun updateSeekbar() {
-//        playerBar.progress = mediaState.getProgress()
-        handler.postDelayed(seekbarUpdater, 100)
+                val drawable = ContextCompat.getDrawable(requireContext(), icon)
+                playerPlayBtn.setImageDrawable(drawable)
+            }
+
+            mediaDuration?.let { duration ->
+                playerBar.progress = ((state.position / duration) * SEEKBAR_MAX).toInt()
+            }
+        }
+
+        override fun onMetadataChanged(metadata: MediaMetadataCompat) {
+            playerTrack.text = metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
+            playerArtist.text = metadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
+            Glide.with(this@PlayerFragment)
+                .load(Uri.parse(metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)))
+                .placeholder(placeholderColor).into(playerAlbumArt)
+            mediaDuration = metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toFloat()
+        }
     }
 }

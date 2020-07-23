@@ -3,4 +3,5 @@
     <string name="tracks_fab_play">PLAY</string>
     <string name="albums_cover_desc">Album cover</string>
     <string name="tracks_album_cover_desc">Album cover</string>
+    <string name="pause">Pause</string>
 </resources>
