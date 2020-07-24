@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialContainerTransform
+import com.rafibaum.papaya.LiftScrollListener
 import com.rafibaum.papaya.MainActivity
 import com.rafibaum.papaya.R
 import kotlinx.android.synthetic.main.fragment_tracks.*
@@ -57,6 +58,7 @@ class TracksFragment : Fragment() {
         adapter = TracksAdapter(this, args.album)
         tracksList.adapter = adapter
         tracksList.layoutManager = LinearLayoutManager(context)
+        tracksList.addOnScrollListener(LiftScrollListener(tracksAppbar))
     }
 
     override fun onStart() {

@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.rafibaum.papaya.LiftScrollListener
 import com.rafibaum.papaya.MainActivity
 import com.rafibaum.papaya.R
 import com.rafibaum.papaya.service.ALBUM_ID
@@ -41,6 +43,7 @@ class AlbumFragment : Fragment() {
             )
         )
         albumList.setHasFixedSize(true)
+        albumList.addOnScrollListener(LiftScrollListener(appbar))
 
         // Needed to make return transitions work. Suspends transition until recycler view is fully
         // loaded and transitions can be mapped properly on return.
