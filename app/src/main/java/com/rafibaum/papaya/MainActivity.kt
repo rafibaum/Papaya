@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     initMediaBrowser()
-                    mediaBrowser!!.connect()
                 }
             }
         }
