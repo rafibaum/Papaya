@@ -38,6 +38,7 @@ class PlayerFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val enterTransition = MaterialContainerTransform()
         enterTransition.scrimColor = Color.TRANSPARENT
+        enterTransition.fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
         sharedElementEnterTransition = enterTransition
 
         placeholderColor = ColorDrawable(
