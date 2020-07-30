@@ -1,5 +1,6 @@
 package com.rafibaum.papaya.tracks
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.util.Log
@@ -34,11 +35,13 @@ class TracksFragment : Fragment() {
         val enterTransform = MaterialContainerTransform()
         enterTransform.scaleMaskProgressThresholds =
             MaterialContainerTransform.ProgressThresholds(0.25f, 1.0f)
+        enterTransform.scrimColor = Color.TRANSPARENT
         sharedElementEnterTransition = enterTransform
 
         val exitTransform = MaterialContainerTransform()
         exitTransform.scaleMaskProgressThresholds =
             MaterialContainerTransform.ProgressThresholds(0.0f, 0.6f)
+        exitTransform.scrimColor = Color.TRANSPARENT
         sharedElementReturnTransition = exitTransform
     }
 
@@ -50,7 +53,7 @@ class TracksFragment : Fragment() {
         tracksList.setHasFixedSize(true)
 
         postponeEnterTransition()
-        tracksList.viewTreeObserver.addOnPreDrawListener {
+        view.viewTreeObserver.addOnPreDrawListener {
             startPostponedEnterTransition()
             true
         }

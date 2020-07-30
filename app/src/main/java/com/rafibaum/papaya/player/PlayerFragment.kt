@@ -1,5 +1,6 @@
 package com.rafibaum.papaya.player
 
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
@@ -34,7 +35,10 @@ class PlayerFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = MaterialContainerTransform()
+        val enterTransition = MaterialContainerTransform()
+        enterTransition.scrimColor = Color.TRANSPARENT
+        sharedElementEnterTransition = enterTransition
+
         placeholderColor = ColorDrawable(
             ContextCompat.getColor(
                 requireContext(),
