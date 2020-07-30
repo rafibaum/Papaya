@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -60,10 +61,6 @@ class PlayerFragment : Fragment() {
         view.transitionName = playerArgs.transitionName
 
         postponeEnterTransition()
-        view.viewTreeObserver.addOnPreDrawListener {
-            startPostponedEnterTransition()
-            true
-        }
 
         val colour: Int = ContextCompat.getColor(requireContext(), R.color.seekbar)
 
@@ -95,6 +92,11 @@ class PlayerFragment : Fragment() {
                 }
             }
         })
+
+        updateMetadata(mediaController.metadata)
+        (view.parent as? ViewGroup)?.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
     }
 
     override fun onResume() {
@@ -111,6 +113,15 @@ class PlayerFragment : Fragment() {
 
         val mediaController = MediaControllerCompat.getMediaController(requireActivity())
         mediaController.unregisterCallback(controllerCallback)
+    }
+
+    private fun updateMetadata(metadata: MediaMetadataCompat) {
+        playerTrack.text = metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
+        playerArtist.text = metadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
+        Glide.with(this@PlayerFragment)
+            .load(Uri.parse(metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)))
+            .placeholder(placeholderColor).into(playerAlbumArt)
+        mediaDuration = metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toFloat()
     }
 
     private val controllerCallback = object : MediaControllerCompat.Callback() {
@@ -142,12 +153,7 @@ class PlayerFragment : Fragment() {
         }
 
         override fun onMetadataChanged(metadata: MediaMetadataCompat) {
-            playerTrack.text = metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE)
-            playerArtist.text = metadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)
-            Glide.with(this@PlayerFragment)
-                .load(Uri.parse(metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)))
-                .placeholder(placeholderColor).into(playerAlbumArt)
-            mediaDuration = metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toFloat()
+            updateMetadata(metadata)
         }
     }
 }

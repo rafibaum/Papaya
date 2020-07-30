@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,10 +54,6 @@ class TracksFragment : Fragment() {
         tracksList.setHasFixedSize(true)
 
         postponeEnterTransition()
-        view.viewTreeObserver.addOnPreDrawListener {
-            startPostponedEnterTransition()
-            true
-        }
 
         adapter = TracksAdapter(this, args.album)
         tracksList.adapter = adapter
@@ -85,6 +82,9 @@ class TracksFragment : Fragment() {
         ) {
             adapter.tracks = children
             adapter.notifyDataSetChanged()
+            (view?.parent as? ViewGroup)?.doOnPreDraw {
+                startPostponedEnterTransition()
+            }
         }
 
         override fun onError(parentId: String) {

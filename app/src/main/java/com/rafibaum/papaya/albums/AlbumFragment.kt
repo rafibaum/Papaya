@@ -6,9 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.rafibaum.papaya.LiftScrollListener
 import com.rafibaum.papaya.MainActivity
 import com.rafibaum.papaya.R
@@ -71,7 +71,9 @@ class AlbumFragment : Fragment() {
         ) {
             adapter.albums = children
             adapter.notifyDataSetChanged()
-            startPostponedEnterTransition()
+            (view?.parent as? ViewGroup)?.doOnPreDraw {
+                startPostponedEnterTransition()
+            }
         }
 
         override fun onError(parentId: String) {
