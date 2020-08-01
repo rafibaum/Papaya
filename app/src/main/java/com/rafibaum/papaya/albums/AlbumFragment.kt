@@ -14,6 +14,7 @@ import com.rafibaum.papaya.MainActivity
 import com.rafibaum.papaya.R
 import com.rafibaum.papaya.service.ALBUM_ID
 import kotlinx.android.synthetic.main.fragment_albums.*
+import kotlin.math.min
 
 class AlbumFragment : Fragment() {
 
@@ -69,6 +70,21 @@ class AlbumFragment : Fragment() {
             parentId: String,
             children: MutableList<MediaBrowserCompat.MediaItem>
         ) {
+            children.sortWith(Comparator { i1, i2 ->
+                val a1 = i1.description.subtitle!!
+                val a2 = i2.description.subtitle!!
+
+                val len = min(a1.length, a2.length)
+
+                for (i in 0..len) {
+                    val cmp = a1[i].compareTo(a2[i])
+                    if (cmp != 0) {
+                        return@Comparator cmp
+                    }
+                }
+
+                return@Comparator a1.length.compareTo(a2.length)
+            })
             adapter.albums = children
             adapter.notifyDataSetChanged()
             (view?.parent as? ViewGroup)?.doOnPreDraw {
