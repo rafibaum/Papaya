@@ -1,9 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/navHostFragment"
-    android:name="androidx.navigation.fragment.NavHostFragment"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:defaultNavHost="true"
-    app:navGraph="@navigation/nav_graph" />
+    app:layoutDescription="@xml/activity_main_scene">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/playerBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
+
+    <View
+        android:id="@+id/playerBackground"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/playerCard"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/playerBackground"
+        app:layout_constraintStart_toStartOf="@id/playerBackground"
+        app:layout_constraintTop_toTopOf="@id/playerBackground"
+        card_view:cardUseCompatPadding="true">
+
+        <ImageView
+            android:id="@+id/playerArt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/kamasi" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/playerTrackText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:elevation="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Fists of Fury"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/playerBackground"
+        app:layout_constraintStart_toEndOf="@id/playerCard"
+        app:layout_constraintTop_toTopOf="@id/playerBackground" />
+
+    <ImageButton
+        android:id="@+id/playerPlayBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
+        android:background="@android:color/transparent"
+        android:elevation="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pause"
+        android:tint="?attr/colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@id/playerBackground"
+        app:layout_constraintEnd_toEndOf="@id/playerBackground"
+        app:layout_constraintTop_toTopOf="@id/playerBackground" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
